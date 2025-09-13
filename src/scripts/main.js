@@ -8,10 +8,35 @@ const removeRowBtn = document.querySelector('.remove-row');
 const appendColumnBtn = document.querySelector('.append-column');
 const removeColumnBtn = document.querySelector('.remove-column');
 
+if (rowQuantity >= 10) {
+  appendRowBtn.setAttribute('disabled', '');
+}
+
+if (rowQuantity <= 2) {
+  removeRowBtn.setAttribute('disabled', '');
+}
+
+if (columnQuantity >= 10) {
+  appendColumnBtn.setAttribute('disabled', '');
+}
+
+if (columnQuantity <= 2) {
+  removeColumnBtn.setAttribute('disabled', '');
+}
+
 appendRowBtn.addEventListener('click', () => {
+  const rows = table.rows.length;
+
+  if (rows >= 10) {
+    appendRowBtn.setAttribute('disabled', '');
+
+    return;
+  }
+  rowQuantity = rows;
+
   const row = table.rows[0].cloneNode(true);
 
-  table.append(row);
+  table.tBodies[0].appendChild(row);
 
   rowQuantity++;
 
@@ -24,6 +49,14 @@ appendRowBtn.addEventListener('click', () => {
 });
 
 removeRowBtn.addEventListener('click', () => {
+  const rows = table.rows.length;
+
+  if (rows <= 2) {
+    removeRowBtn.setAttribute('disabled', '');
+
+    return;
+  }
+  rowQuantity = rows;
   table.rows[rowQuantity - 1].remove();
   rowQuantity--;
 
@@ -36,6 +69,16 @@ removeRowBtn.addEventListener('click', () => {
 });
 
 appendColumnBtn.addEventListener('click', () => {
+  const columns = table.rows[0].cells.length;
+
+  if (columns >= 10) {
+    appendColumnBtn.setAttribute('disabled', '');
+
+    return;
+  }
+
+  columnQuantity = columns;
+
   [...table.rows].forEach((row) => {
     const cell = document.createElement('td');
 
@@ -52,8 +95,20 @@ appendColumnBtn.addEventListener('click', () => {
 });
 
 removeColumnBtn.addEventListener('click', () => {
+  const columns = table.rows[0].cells.length;
+
+  if (columns <= 2) {
+    removeColumnBtn.setAttribute('disabled', '');
+
+    return;
+  }
+
+  columnQuantity = columns;
+
   [...table.rows].forEach((row) => {
-    row.lastElementChild.remove();
+    if (row.lastElementChild) {
+      row.lastElementChild.remove();
+    }
   });
   columnQuantity--;
 
